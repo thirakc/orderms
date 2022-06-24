@@ -1,6 +1,9 @@
 package order
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 type Order struct {
 	Region        string    `json:"region"`
@@ -22,3 +25,10 @@ type Order struct {
 // Sub-Saharan Africa,South Africa,Fruits,Offline,M,7/27/2012,443368995,7/28/2012,1593,9.33,6.92,14862.69,11023.56,3839.13
 // Middle East and North Africa,Morocco,Clothes,Online,M,9/14/2013,667593514,10/19/2013,4611,109.28,35.84,503890.08,165258.24,338631.84
 // Australia and Oceania,Papua New Guinea,Meat,Offline,M,5/15/2015,940995585,6/4/2015,360,421.89,364.69,151880.40,131288.40,20592.00
+
+func (o *Order) Validate() error {
+	if o.SalesChannel == "" {
+		return errors.New("sales_channel is not empty")
+	}
+	return nil
+}

@@ -24,10 +24,16 @@ func main() {
 	}
 	defer os.Remove("/tmp/live")
 
-	r := router.New()
-
 	handler := order.NewHandler(store.NewMariaDBStore(os.Getenv("DSN")), os.Getenv("FILTER_CHANNEL"))
-	r.POST("api/v1/orders", handler.Order)
 
+	var r router.Router
+
+	if os.Getenv("ROUTER") == "gin" {
+		r = router.New()
+	} else {
+		r = router.NewFiberRouter()
+	}
+
+	r.POST("api/v1/orders", handler.Order)
 	r.ListenAndServe()()
 }
